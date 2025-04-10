@@ -1,35 +1,22 @@
 #include <Arduino.h>
-#include <WiFi.h>
-#include <HTTPClient.h>
-#include <ArduinoJson.h>
+#include "SerialComm.h"
 
-// put function declarations here:
-int myFunction(int, int);
+SerialComm comm;
 
 void setup()
 {
-
   Serial.begin(115200);
-  int result = myFunction(2, 3);
-  JsonDocument doc;
-
-  doc["x"] = result;
-  doc["y"] = "z";
-  doc["z"] = "y";
-
-  String json;
-
-  serializeJson(doc, json);
-  Serial.println(json);
+  comm.begin(Serial2, 9600);
 }
 
 void loop()
 {
-  // put your main code here, to run repeatedly:
-}
+  String receivedMessage = comm.receive();
+  if (receivedMessage != "")
+  {
+    Serial.println("Received: " + receivedMessage);
+  }
 
-// put function definitions here:
-int myFunction(int x, int y)
-{
-  return x + y;
+  comm.send("Hello from ESP32!");
+  delay(1000);
 }
