@@ -14,9 +14,18 @@ void SerialComm::send(const String &message)
     }
 }
 
-String SerialComm::receive()
+String SerialComm::receive(Keyvalue *data)
 {
-    if (serial && serial->available())
+    if (serial)
+    {
+        return serial->readStringUntil('\n');
+    }
+    return "";
+}
+
+String SerialComm::readline()
+{
+    if (serial)
     {
         return serial->readStringUntil('\n');
     }
