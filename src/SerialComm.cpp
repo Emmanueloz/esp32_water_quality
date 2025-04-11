@@ -1,8 +1,9 @@
 #include "SerialComm.h"
 
-void SerialComm::begin(HardwareSerial &serialPort, unsigned long baudrate)
+SerialComm::SerialComm(HardwareSerial &serialPort) : serial(&serialPort) {}
+
+void SerialComm::begin(long baudrate)
 {
-    serial = &serialPort;
     serial->begin(baudrate);
 }
 
@@ -14,13 +15,36 @@ void SerialComm::send(const String &message)
     }
 }
 
-String SerialComm::receive(Keyvalue *data)
+int SerialComm::receive(Keyvalue *data)
 {
-    if (serial)
+    if (!serial->available())
+        return 0;
+
+    String line = readline();
+    line.trim();
+
+    int count = 0;
+    int start = 0;
+
+    while (start < line.length() && count < MAX_PAIRS)
     {
-        return serial->readStringUntil('\n');
+        int commaIndex = line.indexOf(',', start);
+        String pair = (commaIndex == -1) ? line.substring(start) : line.substring(start, commaIndex);
+        int equalIndex = pair.indexOf('=');
+
+        if (equalIndex != -1)
+        {
+            data[count].key = pair.substring(0, equalIndex);
+            data[count].value = pair.substring(equalIndex + 1);
+            count++;
+        }
+
+        if (commaIndex == -1)
+            break;
+        start = commaIndex + 1;
     }
-    return "";
+
+    return count;
 }
 
 String SerialComm::readline()
