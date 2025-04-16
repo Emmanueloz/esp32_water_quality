@@ -1,22 +1,23 @@
-#include <Arduino.h>
 #pragma once
+#include <Arduino.h>
 
-#define MAX_PAIRS 10
+#define MAX_PAIRS 10 // Máximo de pares clave=valor por mensaje
+
 struct Keyvalue
 {
     String key;
     String value;
 };
+
 class SerialComm
 {
-private:
-    HardwareSerial *serial;
-    String readline();
-
 public:
-    SerialComm();
     SerialComm(HardwareSerial &serialPort);
     void begin(long baudRate);
     void send(const String &message);
     int receive(Keyvalue *data);
+
+private:
+    HardwareSerial &serialPort;
+    String readLine();
 };

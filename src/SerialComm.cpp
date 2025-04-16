@@ -1,26 +1,23 @@
 #include "SerialComm.h"
 
-SerialComm::SerialComm(HardwareSerial &serialPort) : serial(&serialPort) {}
+SerialComm::SerialComm(HardwareSerial &serial) : serialPort(serial) {}
 
-void SerialComm::begin(long baudrate)
+void SerialComm::begin(long baudRate)
 {
-    serial->begin(baudrate);
+    serialPort.begin(baudRate);
 }
 
 void SerialComm::send(const String &message)
 {
-    if (serial)
-    {
-        serial->println(message);
-    }
+    serialPort.println(message);
 }
 
 int SerialComm::receive(Keyvalue *data)
 {
-    if (!serial->available())
+    if (!serialPort.available())
         return 0;
 
-    String line = readline();
+    String line = readLine();
     line.trim();
 
     int count = 0;
@@ -47,11 +44,11 @@ int SerialComm::receive(Keyvalue *data)
     return count;
 }
 
-String SerialComm::readline()
+String SerialComm::readLine()
 {
-    if (serial)
+    if (serialPort)
     {
-        return serial->readStringUntil('\n');
+        return serialPort.readStringUntil('\n');
     }
     return "";
 }

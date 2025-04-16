@@ -1,22 +1,22 @@
 #include <Arduino.h>
 #include "SerialComm.h"
 
-SerialComm comm;
+SerialComm comm(Serial2);
 
 void setup()
 {
   Serial.begin(115200);
-  comm.begin(Serial2, 9600);
+  comm.begin(9600);
 }
 
 void loop()
 {
-  String receivedMessage = comm.receive();
-  if (receivedMessage != "")
-  {
-    Serial.println("Received: " + receivedMessage);
-  }
+  Keyvalue kv[MAX_PAIRS];
+  int count = comm.receive(kv);
 
-  comm.send("Hello from ESP32!");
+  for (int i = 0; i < count; i++)
+  {
+    Serial.println(kv[i].key + "=" + kv[i].value);
+  }
   delay(1000);
 }
