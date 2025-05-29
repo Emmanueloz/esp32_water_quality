@@ -2,8 +2,15 @@
 
 SerialComm::SerialComm(HardwareSerial &serial) : serialPort(serial) {}
 
-void SerialComm::begin(long baudRate)
+void SerialComm::begin(long baudRate, uint32_t config, int8_t rxPin, int8_t txPin)
 {
+    if (config != -1, rxPin != -1, txPin != -1)
+    {
+        Serial.println("Initializing serial port with custom configuration...");
+        serialPort.begin(baudRate, config, rxPin, txPin);
+        return;
+    }
+
     serialPort.begin(baudRate);
 }
 

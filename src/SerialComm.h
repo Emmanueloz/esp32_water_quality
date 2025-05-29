@@ -13,7 +13,7 @@ class SerialComm
 {
 public:
     SerialComm(HardwareSerial &serialPort);
-    void begin(long baudRate);
+    void begin(long baudRate, uint32_t config = -1, int8_t rxPin = -1, int8_t txPin = -1);
     void send(const String &message);
     int receive(Keyvalue *data);
 
