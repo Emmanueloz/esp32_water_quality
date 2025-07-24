@@ -14,7 +14,7 @@ void setup()
 {
   Serial.begin(9600);
   comm.begin(9600, 134217756U, 16, 17); // Serial1, RX=16, TX=17
-  Socket::setSerial(&comm);
+  Socket::setSerialComm(&comm);
   Serial.println("Setup");
 }
 

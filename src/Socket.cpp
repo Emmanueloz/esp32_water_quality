@@ -1,9 +1,10 @@
 #include "Socket.h"
 
-void Socket::setSerial(SerialComm *serialComm)
+SerialComm *Socket::_comm = nullptr;
+
+void Socket::setSerialComm(SerialComm *serialComm)
 {
-    comm = serialComm;
-    Serial.println("Serial communication set for Socket.");
+    _comm = serialComm;
 }
 
 bool Socket::connectServer(String host, int port, String apiKey)
