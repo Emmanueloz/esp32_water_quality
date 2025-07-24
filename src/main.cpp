@@ -14,6 +14,7 @@ void setup()
 {
   Serial.begin(9600);
   comm.begin(9600, 134217756U, 16, 17); // Serial1, RX=16, TX=17
+  Socket::setSerial(&comm);
   Serial.println("Setup");
 }
 
@@ -59,6 +60,8 @@ void connectInit(Keyvalue kv[], int count)
     Serial.print(".");
     comm.send("response=connecting");
   }
+
+  Socket::connectServer("https://api.aqua-minds.org", 80, apiKey);
   Serial.println("Connected to WiFi");
   comm.send("response=connectSuccess");
 }
