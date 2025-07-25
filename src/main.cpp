@@ -61,9 +61,9 @@ void connectInit(Keyvalue kv[], int count)
     comm.send("response=connecting");
   }
 
-  Socket::connectServer("api.aqua-minds.org", 443, apiKey);
   Serial.println("Connected to WiFi");
-  comm.send("response=connectSuccess");
+  comm.send("response=connectWifiSuccess");
+  Socket::connectServer("api.aqua-minds.org", 443, apiKey);
 }
 
 void seenRecords(Keyvalue kv[], int count)
@@ -114,6 +114,7 @@ void loop()
     else if (kv[0].value == "seenFinished")
     {
       Serial.println("Seen finished");
+      Socket::disconnectServer();
     }
     else
     {
