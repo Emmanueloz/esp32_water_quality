@@ -61,7 +61,7 @@ void connectInit(Keyvalue kv[], int count)
     comm.send("response=connecting");
   }
 
-  Socket::connectServer("https://api.aqua-minds.org", 80, apiKey);
+  Socket::connectServer("api.aqua-minds.org", 443, apiKey);
   Serial.println("Connected to WiFi");
   comm.send("response=connectSuccess");
 }
@@ -99,6 +99,7 @@ void loop()
 {
   Keyvalue kv[MAX_PAIRS];
   int count = comm.receive(kv);
+  Socket::socketLoop();
 
   if (count > 0 && kv[0].key == "command")
   {
