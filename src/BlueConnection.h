@@ -19,7 +19,9 @@ private:
   static BLEServer *pServer;
   static BLEService *pService;
   static BLECharacteristic *pCharacteristic;
+  static bool isInitialized;
 
 public:
   static void initConnection(BlueInitConnection initConnection);
+  static void deinitConnection();
 };
