@@ -1,5 +1,9 @@
 #include "BlueConnection.h"
 
+BLEServer *BlueConnection::pServer = nullptr;
+BLEService *BlueConnection::pService = nullptr;
+BLECharacteristic *BlueConnection::pCharacteristic = nullptr;
+
 void BlueConnection::initConnection(BlueInitConnection initConnection)
 {
     BLEDevice::init(initConnection.name.c_str());

@@ -6,7 +6,7 @@
 #include "BlueConnection.h"
 #include "BlueCallback.h"
 
-BlueCallback blueCallback;
+BlueCallback blueCallback(nullptr);
 
 SerialComm comm(Serial1);
 
