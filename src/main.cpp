@@ -1,8 +1,12 @@
 #include <Arduino.h>
-#include "SerialComm.h"
+#include <WiFi.h>
 #include <ArduinoJson.h>
 #include <Socket.h>
-#include <WiFi.h>
+#include "SerialComm.h"
+#include "BlueConnection.h"
+#include "BlueCallback.h"
+
+BlueCallback blueCallback;
 
 SerialComm comm(Serial1);
 
@@ -10,11 +14,15 @@ String ssid = "";
 String password = "";
 String apiKey = "";
 
+const String SERVICE_UUID = "853540ca-6f63-4823-baf8-52dc3781b06a";
+const String CHARACTERISTIC_UUID = "1a5c9524-128c-40b9-9b13-bf435190a3a6";
+
 void setup()
 {
   Serial.begin(9600);
   comm.begin(9600, 134217756U, 16, 17); // Serial1, RX=16, TX=17
   Socket::setSerialComm(&comm);
+  blueCallback = BlueCallback(&comm);
   Serial.println("Setup");
 }
 
@@ -115,6 +123,17 @@ void loop()
     {
       Serial.println("Seen finished");
       Socket::disconnectServer();
+    }
+    else if (kv[0].value == "connectBluetooth")
+    {
+      Serial.println("Connecting to bluetooth");
+
+      BlueConnection::initConnection(
+          BlueInitConnection{
+              "ESP32 Water Quality",
+              SERVICE_UUID,
+              CHARACTERISTIC_UUID,
+              &blueCallback});
     }
     else
     {
