@@ -142,4 +142,11 @@ void loop()
       comm.send("response=UnknownCommand");
     }
   }
+  else if (Serial.available())
+  {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+    Serial.println(command);
+    comm.send(command);
+  }
 }
