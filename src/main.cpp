@@ -103,6 +103,19 @@ void seenRecords(Keyvalue kv[], int count)
   comm.send("response=seenSuccess");
 }
 
+void sendBluetooth(Keyvalue kv[], int count)
+{
+  Serial.println("Sending bluetooth");
+  JsonDocument doc = JsonDocument();
+
+  for (int i = 0; i < count; i++)
+  {
+    doc[kv[i].key] = kv[i].value;
+  }
+
+  BlueConnection::seen(doc.as<String>());
+}
+
 void loop()
 {
   Keyvalue kv[MAX_PAIRS];
@@ -134,6 +147,10 @@ void loop()
               SERVICE_UUID,
               CHARACTERISTIC_UUID,
               &blueCallback});
+    }
+    else if (kv[0].value == "sendBluetooth")
+    {
+      sendBluetooth(kv, count);
     }
     else
     {

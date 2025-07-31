@@ -24,4 +24,5 @@ private:
 public:
   static void initConnection(BlueInitConnection initConnection);
   static void deinitConnection();
+  static void seen(String value);
 };
