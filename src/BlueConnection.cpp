@@ -4,6 +4,26 @@ BLEServer *BlueConnection::pServer = nullptr;
 BLEService *BlueConnection::pService = nullptr;
 BLECharacteristic *BlueConnection::pCharacteristic = nullptr;
 bool BlueConnection::isInitialized = false;
+SerialComm *BlueConnection::comm = nullptr;
+
+class BlueServerCallbacks : public BLEServerCallbacks
+{
+    void onConnect(BLEServer *pServer)
+    {
+        // Optional: Handle connection
+    }
+
+    void onDisconnect(BLEServer *pServer)
+    {
+        if (BlueConnection::comm)
+        {
+            BlueConnection::comm->send("response=bluetoothOff");
+        }
+        // Restart advertising
+        BLEDevice::startAdvertising();
+    }
+    friend class BlueConnection;
+};
 
 void BlueConnection::deinitConnection()
 {
@@ -56,8 +76,11 @@ void BlueConnection::initConnection(BlueInitConnection initConnection)
     // Initialize BLE device
     BLEDevice::init(initConnection.name.c_str());
 
+    comm = initConnection.serialComm;
+
     // Create BLE Server
     pServer = BLEDevice::createServer();
+    pServer->setCallbacks(new BlueServerCallbacks());
 
     // Create BLE Service
     pService = pServer->createService(initConnection.serviceUUID.c_str());

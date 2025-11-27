@@ -4,6 +4,7 @@
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
+#include "SerialComm.h"
 
 struct BlueInitConnection
 {
@@ -11,6 +12,7 @@ struct BlueInitConnection
   String serviceUUID;
   String characteristicUUID;
   BLECharacteristicCallbacks *callbacks;
+  SerialComm *serialComm;
 };
 
 class BlueConnection
@@ -22,6 +24,7 @@ private:
   static bool isInitialized;
 
 public:
+  static SerialComm *comm;
   static void initConnection(BlueInitConnection initConnection);
   static void deinitConnection();
   static void seen(String value);
