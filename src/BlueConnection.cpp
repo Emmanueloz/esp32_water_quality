@@ -11,6 +11,10 @@ class BlueServerCallbacks : public BLEServerCallbacks
     void onConnect(BLEServer *pServer)
     {
         // Optional: Handle connection
+        if (BlueConnection::comm)
+        {
+            BlueConnection::comm->send("response=bluetoothOn");
+        }
     }
 
     void onDisconnect(BLEServer *pServer)
