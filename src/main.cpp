@@ -141,13 +141,20 @@ void loop()
     else if (kv[0].value == "connectBluetooth")
     {
       Serial.println("Connecting to bluetooth");
-
       BlueConnection::initConnection(
           BlueInitConnection{
               "ESP32 Water Quality",
               SERVICE_UUID,
               CHARACTERISTIC_UUID,
-              &blueCallback});
+              &blueCallback,
+              &comm});
+
+      comm.send("response=bluetoothOn");
+    }
+    else if (kv[0].value == "disconnectBluetooth")
+    {
+      BlueConnection::deinitConnection();
+      comm.send("response=bluetoothOff");
     }
     else if (kv[0].value == "sendBluetooth")
     {
